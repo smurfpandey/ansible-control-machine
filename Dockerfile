@@ -11,4 +11,14 @@ RUN pip install ansible
 RUN apk del build-dependencies build-base openssl-dev libffi-dev && \
     rm -rf /var/cache/apk/*
 
-CMD [ "ansible-playbook", "--version" ]
+# Setup runtime environment
+RUN mkdir -p /ansible/playbooks
+WORKDIR /ansible/playbooks
+
+ENV ANSIBLE_GATHERING smart
+ENV ANSIBLE_HOST_KEY_CHECKING false
+ENV ANSIBLE_RETRY_FILES_ENABLED false
+ENV ANSIBLE_ROLES_PATH /ansible/playbooks/roles
+ENV ANSIBLE_SSH_PIPELINING True
+
+ENTRYPOINT ["ansible-playbook"]
