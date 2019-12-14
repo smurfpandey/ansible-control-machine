@@ -1,5 +1,8 @@
 FROM python:3.7.4-alpine3.9
 
+# Install runtime dependencies
+RUN apk add --update --no-cache openssh sshpass
+
 # Install build dependencies
 RUN apk --update add --virtual build-dependencies build-base openssl-dev libffi-dev && \
     pip install --upgrade pip cffi
@@ -20,5 +23,6 @@ ENV ANSIBLE_HOST_KEY_CHECKING false
 ENV ANSIBLE_RETRY_FILES_ENABLED false
 ENV ANSIBLE_ROLES_PATH /ansible/playbooks/roles
 ENV ANSIBLE_SSH_PIPELINING True
+ENV PATH /ansible/bin:$PATH
 
 ENTRYPOINT ["ansible-playbook"]
