@@ -25,4 +25,7 @@ ENV ANSIBLE_ROLES_PATH /ansible/playbooks/roles
 ENV ANSIBLE_SSH_PIPELINING True
 ENV PATH /ansible/bin:$PATH
 
-ENTRYPOINT ["ansible-playbook"]
+COPY docker-entrypoint.sh /bin/docker-entrypoint.sh
+RUN chmod +x /bin/docker-entrypoint.sh
+
+ENTRYPOINT ["/bin/docker-entrypoint.sh"]
