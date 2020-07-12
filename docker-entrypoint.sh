@@ -11,4 +11,12 @@ if [ -f "$FILE" ]; then
     chmod 600 /root/.ssh/id_rsa
 fi
 
+if [ -z "$VAULT_PASS" ]; then
+    echo "Skipping vault password file creation."
+else
+    VAULT_PASS_FILE=/tmp/ansible_vault_pass
+    echo "Creating vault password file at $VAULT_PASS_FILE."
+    echo $VAULT_PASS >> $VAULT_PASS_FILE    
+fi
+
 ansible-playbook "$@"
