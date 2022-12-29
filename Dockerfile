@@ -8,7 +8,9 @@ RUN apk --update add --virtual build-dependencies build-base openssl-dev libffi-
     pip install --upgrade pip cffi
 
 # Install ansible
-RUN pip install ansible
+RUN pip install ansible==7.1.0
+RUN pip install ansible-core==2.12.3
+
 
 # Clear out dependencies
 RUN apk del build-dependencies build-base openssl-dev libffi-dev && \
