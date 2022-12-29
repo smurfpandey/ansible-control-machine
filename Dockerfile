@@ -1,4 +1,4 @@
-FROM python:3.7.4-alpine3.9
+FROM python:3.9.16-alpine3.17
 
 # Install runtime dependencies
 RUN apk add --update --no-cache openssh sshpass
@@ -9,8 +9,9 @@ RUN apk --update add --virtual build-dependencies build-base openssl-dev libffi-
 
 # Install ansible
 RUN pip install ansible==7.1.0
-RUN pip install ansible-core==2.12.3
+RUN pip install ansible-core==2.14.1
 
+RUN ansible --version
 
 # Clear out dependencies
 RUN apk del build-dependencies build-base openssl-dev libffi-dev && \
