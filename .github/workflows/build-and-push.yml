@@ -14,7 +14,8 @@ jobs:
       - name: Prepare
         id: prep
         run: |
-          echo "tags=ghcr.io/${{ github.repository }}:${{ github.sha[:7] }},ghcr.io/${{ github.repository }}:latest" >> $GITHUB_OUTPUT
+          VERSION="${GITHUB_SHA:0:7}"
+          echo "tags=ghcr.io/${{ github.repository }}:$VERSION,ghcr.io/${{ github.repository }}:latest" >> $GITHUB_OUTPUT
       
       - name: setup platform emulator
         uses: docker/setup-qemu-action@v4
