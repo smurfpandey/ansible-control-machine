@@ -1,4 +1,4 @@
-FROM python:3.9.16-alpine3.17
+FROM public.ecr.aws/docker/library/python:3.14-alpine3.22
 
 # Install runtime dependencies
 RUN apk add --update --no-cache openssh sshpass
@@ -8,8 +8,7 @@ RUN apk --update add --virtual build-dependencies build-base openssl-dev libffi-
     pip install --upgrade pip cffi
 
 # Install ansible
-RUN pip install ansible==7.1.0
-RUN pip install ansible-core==2.14.1
+RUN pip install ansible==13.5.0
 
 RUN ansible --version
 

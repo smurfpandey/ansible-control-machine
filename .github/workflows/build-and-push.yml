@@ -9,23 +9,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
-        uses: actions/checkout@v3
-      - uses: FranzDiebold/github-env-vars-action@v1.2.1
+        uses: actions/checkout@v6
+
       - name: Prepare
         id: prep
         run: |
-          DOCKER_IMAGE=ghcr.io/$GITHUB_REPOSITORY
-          VERSION=$GITHUB_SHA_SHORT
-          TAGS="${DOCKER_IMAGE}:${VERSION}"
-          echo ${TAGS}
-          echo ::set-output name=tags::${TAGS}
+          echo "tags=ghcr.io/${{ github.repository }}:${{ github.sha[:7] }},ghcr.io/${{ github.repository }}:latest" >> $GITHUB_OUTPUT
+      
       - name: setup platform emulator
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v4
 
       - name: setup multi-arch docker build
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v4
+
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
@@ -33,7 +31,7 @@ jobs:
             ${{ runner.os }}-buildx-
             
       - name: Login to ghcr
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -41,10 +39,10 @@ jobs:
 
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.prep.outputs.tags }}
